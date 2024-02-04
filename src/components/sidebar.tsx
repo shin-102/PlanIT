@@ -1,31 +1,39 @@
-export function Sidebar() {
+
+import React, { useState } from 'react';
+import Tasklist from './Tasklist';
+import Notefield from './notefield';
+
+const Sidebar: React.FC = () => {
+  const [showTasklist, setShowTasklist] = useState<boolean>(false);
+  const [showNotefield, setShowNotefield] = useState<boolean>(false);
+
+  const handleShowTasklist = () => {
+    setShowTasklist(true);
+    setShowNotefield(false);
+  };
+
+  const handleShowNotefield = () => {
+    setShowTasklist(false);
+    setShowNotefield(true);
+  };
+
   return(
     <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
         <div className="p-2.5 my-3 flex items-center text-center ">
           <h1 className="font-bold text-gray-200 text-[20px] ml-3">MS ToDo Replica</h1>
         </div>
         <div className="my-2 bg-gray-600 h-[1px]"></div>
-      {/* <div
-        className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
-        <i className="bi bi-search text-sm"></i>
-        <input
-          type="text"
-          placeholder="Search"
-          className="text-[15px] ml-4 w-full bg-transparent focus:outline-none"
-        />
-        <button></button>
-      </div> */}
       <div
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
       >
         <i className="bi bi-house-door-fill"></i>
-        <span className="text-[15px] ml-4 text-gray-200 font-bold">My day</span>
+        <button onClick={handleShowTasklist} className="text-[15px] ml-4 text-gray-200 font-bold">Tasks</button>
       </div>
       <div
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
       >
         <i className="bi bi-bookmark-fill"></i>
-        <span className="text-[15px] ml-4 text-gray-200 font-bold">Bookmark</span>
+        <button onClick={handleShowNotefield} className="text-[15px] ml-4 text-gray-200 font-bold">Notes</button>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 ">
@@ -43,3 +51,5 @@ export function Sidebar() {
     </div>
   )
 };
+
+export default Sidebar;

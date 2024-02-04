@@ -1,21 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
 import './App.css'
 
-import {Sidebar} from './components/sidebar'
+import Sidebar from './components/sidebar'
+import Tasklist from './components/Tasklist';
+import Notefield from './components/notefield';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
 
   return (
     <section>
       <Sidebar />
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-      </h1>
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-2 gap-4">
+          <Tasklist />
+          <Notefield />
+        </div>
+      </div>
     </section>
   )
 }
 
-export default App
+export default App;

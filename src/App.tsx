@@ -25,7 +25,7 @@ const App: React.FC = () => {
         onToggleTasklist={handleToggleTasklist}
         onToggleNotefield={handleToggleNotefield}
       />
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 bg-slate-400 rounded-md">
         <div className="grid grid-cols-2 gap-4">
           {showTasklist && <Tasklist />}
           {showNotefield && <Notefield />}

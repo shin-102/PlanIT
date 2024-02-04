@@ -1,21 +1,13 @@
 
 import React, { useState } from 'react';
-import Tasklist from './Tasklist';
-import Notefield from './notefield';
 
-const Sidebar: React.FC = () => {
-  const [showTasklist, setShowTasklist] = useState<boolean>(false);
-  const [showNotefield, setShowNotefield] = useState<boolean>(false);
+interface SidebarProps {
+  onToggleTasklist: () => void;
+  onToggleNotefield: () => void;
+}
 
-  const handleShowTasklist = () => {
-    setShowTasklist(true);
-    setShowNotefield(false);
-  };
+const Sidebar: React.FC<SidebarProps> = ({ onToggleTasklist, onToggleNotefield }) => {
 
-  const handleShowNotefield = () => {
-    setShowTasklist(false);
-    setShowNotefield(true);
-  };
 
   return(
     <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
@@ -27,13 +19,13 @@ const Sidebar: React.FC = () => {
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
       >
         <i className="bi bi-house-door-fill"></i>
-        <button onClick={handleShowTasklist} className="text-[15px] ml-4 text-gray-200 font-bold">Tasks</button>
+        <button onClick={onToggleTasklist} className="text-[15px] ml-4 text-gray-200 font-bold">Tasks</button>
       </div>
       <div
         className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white"
       >
         <i className="bi bi-bookmark-fill"></i>
-        <button onClick={handleShowNotefield} className="text-[15px] ml-4 text-gray-200 font-bold">Notes</button>
+        <button onClick={onToggleNotefield} className="text-[15px] ml-4 text-gray-200 font-bold">Notes</button>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 ">

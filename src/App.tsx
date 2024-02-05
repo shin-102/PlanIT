@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css'
 
 import Sidebar from './components/sidebar'
-import Tasklist from './components/Tasklist';
+import Tasklist from './components/tasklist';
 import Notefield from './components/notefield';
 
 const App: React.FC = () => {
@@ -25,11 +25,9 @@ const App: React.FC = () => {
         onToggleTasklist={handleToggleTasklist}
         onToggleNotefield={handleToggleNotefield}
       />
-      <div className="container mx-auto p-4 bg-slate-400 rounded-md">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="container mx-auto flex justify-center items-center w-screen h-[750px] bg-slate-400 rounded-md ">
           {showTasklist && <Tasklist />}
           {showNotefield && <Notefield />}
-        </div>
       </div>
     </section>
   )

@@ -35,13 +35,13 @@ const Tasklist: React.FC = () => {
     };
 
     return (
-      <div>
-        <h2 className="text-lg font-semibold mb-2">To-do List</h2>
+      <div className='w-9/12 bg-blue-200'>
+        <h2 className="text-lg font-semibold mb-2">Tasks List</h2>
         <div className="mb-4">
           <input
             type="text"
             className="border border-gray-300 rounded-md p-2 mr-2"
-            placeholder="Add a new todo"
+            placeholder="Add a new task"
             value={inputText}
             onChange={handleInputChange}
           />
@@ -49,7 +49,7 @@ const Tasklist: React.FC = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
             onClick={handleAddTask}
           >
-            Add Todo
+            Add Task
           </button>
         </div>
         <ul>
@@ -57,8 +57,8 @@ const Tasklist: React.FC = () => {
             <li
               key={task.id}
               className={`${
-                task.completed ? 'line-through text-gray-400' : ''
-              } cursor-pointer`}
+                task.completed ? 'line-through text-green-600' : ''
+              } cursor-pointer border-2 border-solid border-red-500`}
               onClick={() => handleToggleTodo(task.id)}
             >
               {task.text}

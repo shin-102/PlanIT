@@ -10,7 +10,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggleTasklist, onToggleNotefield }
 
 
   return(
-    <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+    <div className="sidebar absolute top-0 bottom-0 sm:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
         
         <div className="p-2.5 my-3 flex items-center text-center ">
           <h1 className="font-bold text-gray-200 text-[20px] ml-3">MS ToDo Replica</h1>

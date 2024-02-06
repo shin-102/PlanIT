@@ -2,6 +2,7 @@
   "name": "react-test2",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://shin-102.github.io/reactV",
   "type": "module",
   "scripts": {
     "dev": "vite",

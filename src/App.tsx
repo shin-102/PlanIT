@@ -1,36 +1,24 @@
 import React, { useState } from 'react';
-import './App.css'
+import './App.css'; // If you're using a separate CSS file
 
-import Sidebar from './components/sidebar'
+import Sidebar from './components/sidebar';
 import Tasklist from './components/tasklist';
-import Notefield from './components/notefield';
 
 const App: React.FC = () => {
-  const [showTasklist, setShowTasklist] = useState<boolean>(true);
-  const [showNotefield, setShowNotefield] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // State in App.tsx
 
-  const handleToggleTasklist = () => {
-    setShowTasklist(true);
-    setShowNotefield(false);
-  };
-
-  const handleToggleNotefield = () => {
-    setShowTasklist(false);
-    setShowNotefield(true);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <section>
-      <Sidebar 
-        onToggleTasklist={handleToggleTasklist}
-        onToggleNotefield={handleToggleNotefield}
-      />
-      <div className="container mx-auto flex justify-center items-center w-screen h-[750px] bg-slate-400 rounded-md ">
-          {showTasklist && <Tasklist />}
-          {showNotefield && <Notefield />}
+    <section className="flex"> {/* Make section a flex container */}
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> {/* Pass props */}
+      <div className={`container mx-auto p-4 w-screen h-[750px] bg-gray-900 rounded-lg transition-all duration-300 ${isSidebarOpen ? 'ml-[300px]' : ''}`}> {/* Conditional margin */}
+        <Tasklist />
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default App;

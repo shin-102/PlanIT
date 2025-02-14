@@ -5,19 +5,20 @@ import myAvatar from '../assets/MyAvatar Notion.png'; // Import directly
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  onTabClick: (tabName: string) => void; // Add onTabClick prop
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {  // Correct prop destructuring
+const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabClick }) => {  // Correct prop destructuring
   const userData = {
     name: "Shin-102",
     email: "shin.102@github",
   };
 
   const tabs = [
-    { name: "Inbox", icon: "inbox" },
-    { name: "Today", icon: "calendar-day" },
-    { name: "Completed", icon: "check-circle" },
-    { name: "Missed", icon: "exclamation-triangle" },
+    { name: "Inbox", icon: "inbox", desc: "All uncomplete todos" },
+    { name: "Today", icon: "calendar-day", desc: "All todos that for today" },
+    { name: "Completed", icon: "check-circle", desc: "All completed todos" },
+    { name: "Missed", icon: "exclamation-triangle", desc: "All missed todos from today" },
   ];
 
   return (
@@ -39,8 +40,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => { 
           <div
             key={tab.name}
             className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 text-white"
-          >
-            <span>{tab.name}</span>
+            onClick={() => onTabClick(tab.name)} >
+              <span>{tab.name}</span>
           </div>
         ))}
       </div>

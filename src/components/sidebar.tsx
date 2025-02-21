@@ -6,20 +6,26 @@ interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   onTabClick: (tabName: string) => void; // Add onTabClick prop
+  tabCounts: { Inbox: number; Today: number; Completed: number; Missed: number }
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabClick }) => {  // Correct prop destructuring
-  const userData = {
-    name: "Shin-102",
-    email: "shin.102@github",
-  };
+const userData = {
+  name: "Shin-102",
+  email: "shin.102@github",
+};
+  
+export const tabs = [
+  { name: "Inbox", icon: "inbox", desc: "All uncomplete todos" },
+  { name: "Today", icon: "calendar-day", desc: "All todos that for today" },
+  { name: "Completed", icon: "check-circle", desc: "All completed todos" },
+  { name: "Missed", icon: "exclamation-triangle", desc: "All missed todos" },
+];
 
-  const tabs = [
-    { name: "Inbox", icon: "inbox", desc: "All uncomplete todos" },
-    { name: "Today", icon: "calendar-day", desc: "All todos that for today" },
-    { name: "Completed", icon: "check-circle", desc: "All completed todos" },
-    { name: "Missed", icon: "exclamation-triangle", desc: "All missed todos from today" },
-  ];
+const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabClick, tabCounts }) => {  // Correct prop destructuring
+  const tabsWithCounts: (typeof tabs[number] & { count: number })[] = tabs.map(tab => ({
+    ...tab, 
+    count: tabCounts[tab.name as keyof typeof tabCounts] || 0, // Dynamically get count
+  }));
 
   return (
     <nav className={`sidebar fixed top-0 left-0 bottom-0 py-2 overflow-y-auto text-left bg-gray-900 transition-all duration-300`}>
@@ -36,12 +42,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabCl
       <div className="my-2 bg-gray-600 h-[1px]"></div>
 
       <div className={`grid grid-cols-2 gap-2 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 mx-4' : 'opacity-0 hidden'}`}> {/* Conditional opacity for tabs */}
-        {tabs.map((tab) => (
+        {tabsWithCounts.map((tab) => (
           <div
             key={tab.name}
-            className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 text-white"
+            className="py-2.5 px-2 flex gap-2 justify-between items-center rounded-md duration-300 cursor-pointer border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 text-white"
             onClick={() => onTabClick(tab.name)} >
               <span>{tab.name}</span>
+              <span className='bg-slate-700 px-2 rounded-full'>{tab.count}</span>
           </div>
         ))}
       </div>

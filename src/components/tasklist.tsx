@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCheckSquare, FaMinus, FaPlus, FaSquare, FaEdit, FaTrash } from 'react-icons/fa'; // Import the plus icon
+import { tabs } from "./sidebar"
 
 interface Task {
   id: number;
@@ -12,15 +13,35 @@ interface Task {
 
 interface TasklistProps {
   activeTab: string; // Add activeTab prop
+  setTabCounts: any;
 }
 
-const Tasklist: React.FC<TasklistProps> = ({ activeTab }) => {
+const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false); // State to toggle input visibility
   const [newTaskText, setNewTaskText] = useState('');
   const [newTaskDate, setNewTaskDate] = useState('');
   const [newTaskTags, setNewTaskTags] = useState<string[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
+
+  useEffect(() => {
+    const newCounts = { Inbox: 0, Today: 0, Completed: 0, Missed: 0 };
+
+    tasks.forEach((task) => {
+      if (!task.completed) {
+        newCounts.Inbox++;
+        if (task.date === currentDate) {
+          newCounts.Today++;
+        } else if (task.date < currentDate) {
+          newCounts.Missed++;
+        }
+      } else {
+        newCounts.Completed++;
+      }
+    });
+
+    setTabCounts(newCounts);
+  }, [tasks, currentDate, setTabCounts]); 
 
   useEffect(() => {
     setCurrentDate(new Date().toISOString().slice(0, 10)); // Set current date on mount
@@ -68,22 +89,25 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab }) => {
   };
 
   const handleUpdateTask = (id: number) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === id
-          ? {
-              ...task,
-              text: newTaskText,
-              date: newTaskDate || currentDate, // Use current date if not specified
-              tags: newTaskTags,
-              isEditing: false, // Remove editing flag
-            }
-          : task
-      )
-    );
-    setNewTaskText('');
-    setNewTaskDate('');
-    setNewTaskTags([]);
+    if (newTaskText.trim() !== '') {
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === id
+            ? {
+                ...task,
+                text: newTaskText,
+                date: newTaskDate || currentDate, // Use current date if not specified
+                tags: newTaskTags,
+                isEditing: false, // Remove editing flag
+              }
+            : task
+        )
+      );
+      setNewTaskText('');
+      setNewTaskDate('');
+      setNewTaskTags([]);      
+    }
+
   };
 
   const handleCancelEdit = (id: number) => {
@@ -112,13 +136,16 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab }) => {
   const filteredTasks = tasks.filter((task) => {
     if (activeTab === "Inbox") {
       return!task.completed; // Inbox: All uncompleted tasks
-    } else if (activeTab === "Today") {
+    } 
+    else if (activeTab === "Today") {
       return (
       !task.completed && task.date === currentDate
       ); // Today: Uncompleted tasks with today's date
-    } else if (activeTab === "Completed") {
+    } 
+    else if (activeTab === "Completed") {
       return task.completed; // Completed: All completed tasks
-    } else if (activeTab === "Missed") {
+    } 
+    else if (activeTab === "Missed") {
       return (
       !task.completed &&
         task.date &&
@@ -128,11 +155,17 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab }) => {
     return true; // Default: show all tasks
   });
 
+  const activeTabDescription = tabs.find(tab => tab.name === activeTab)?.desc || ""; // Provide a default if not found
+
+
   return (
     <div className=""> {/* Main container with dark background */}
       <div className="flex items-center justify-between bg-gray-800 p-4 rounded-lg ">
-        <h2 className="text-lg font-semibold text-white">{activeTab}</h2>
-        <p>{}</p>
+        <div className='inline-flex items-center gap-4'>
+          <h2 className="text-lg font-semibold text-white">{activeTab}</h2>
+          <p>{activeTabDescription}</p>          
+        </div>
+
         <div className='inline-flex '>
           {isAddingTask && ( // Conditionally render the input form
             <div className="flex justify-end items-center mx-4 rounded-b-lg">

@@ -46,6 +46,9 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
   useEffect(() => {
     setCurrentDate(new Date().toISOString().slice(0, 10)); // Set current date on mount
   }, []);
+  const today = new Date(currentDate);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTaskText(event.target.value);
@@ -160,7 +163,13 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
 
   return (
     <div className=""> {/* Main container with dark background */}
-      <div className="flex items-center justify-between bg-gray-800 p-4 rounded-lg ">
+      <div className={`flex items-center justify-between p-4 rounded-lg ${
+        activeTab == 'Inbox' ? 'bg-blue-900' 
+        : activeTab == 'Missed' ? 'bg-red-900' 
+        : activeTab == 'Completed' ? 'bg-green-900' 
+        : activeTab == 'Today' ? 'bg-green-700' 
+        : ''
+      }`}>
         <div className='inline-flex items-center gap-4'>
           <h2 className="text-lg font-semibold text-white">{activeTab}</h2>
           <p>{activeTabDescription}</p>          
@@ -249,7 +258,14 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
                 <div className='flex items-center gap-2' onClick={() => handleToggleTodo(task.id)} >
                   {task.completed ? <FaCheckSquare className='w-6 h-6 text-green-600'/> : <FaSquare className='w-6 h-6 fill-blue-600/20 stroke-blue-600 stroke-[20px]'/>}
                   <p className={`text-lg ${ task.completed ? 'text-green-600' : 'text-white' }`}>{task.text}</p>
-                    {task.date && <span className="text-sm ml-2 text-gray-400 invisible group-hover:visible">({task.date})</span>}
+                    {task.date && 
+                    <span className={`text-sm ml-2 group-hover:visible 
+                    ${task.date == currentDate ? 'text-green-500' 
+                      : task.date == tomorrow.toISOString().slice(0, 10) ? 'text-orange-400 invisible' 
+                      : task.date < currentDate ? 'text-red-600 invisible' 
+                      : 'text-gray-400 invisible' }`}>
+                      {task.date == currentDate ? 'Today' : task.date == tomorrow.toISOString().slice(0, 10) ? 'Tomorrow' : task.date}
+                    </span>}
                     {task.tags && task.tags.length > 0 && (
                       <span className="italic mr-2 text-gray-400 invisible group-hover:visible">
                         #{task.tags.join(', #')}

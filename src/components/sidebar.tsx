@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import React, {useState} from 'react';
+import { FaBars, FaTimes, FaInbox, FaCalendar, FaCheckSquare, FaExclamationTriangle } from 'react-icons/fa';
 import myAvatar from '../assets/MyAvatar Notion.png'; // Import directly
 
 interface SidebarProps {
@@ -15,13 +15,14 @@ const userData = {
 };
   
 export const tabs = [
-  { name: "Inbox", icon: "inbox", desc: "All uncomplete todos" },
-  { name: "Today", icon: "calendar-day", desc: "All todos that for today" },
-  { name: "Completed", icon: "check-circle", desc: "All completed todos" },
-  { name: "Missed", icon: "exclamation-triangle", desc: "All missed todos" },
+  { name: "Inbox", icon: <FaInbox />, desc: "All uncomplete todos" },
+  { name: "Today", icon: <FaCalendar />, desc: "All todos that for today" },
+  { name: "Completed", icon: <FaCheckSquare />, desc: "All completed todos" },
+  { name: "Missed", icon: <FaExclamationTriangle />, desc: "All missed todos" },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabClick, tabCounts }) => {  // Correct prop destructuring
+  const [activeTab, setActiveTab] = useState(null); // Store active tab
   const tabsWithCounts: (typeof tabs[number] & { count: number })[] = tabs.map(tab => ({
     ...tab, 
     count: tabCounts[tab.name as keyof typeof tabCounts] || 0, // Dynamically get count
@@ -45,10 +46,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabCl
         {tabsWithCounts.map((tab) => (
           <div
             key={tab.name}
-            className="py-2.5 px-2 flex gap-2 justify-between items-center rounded-md duration-300 cursor-pointer border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 text-white"
-            onClick={() => onTabClick(tab.name)} >
-              <span>{tab.name}</span>
-              <span className='bg-slate-700 px-2 rounded-full'>{tab.count}</span>
+            className={`py-2.5 px-2 flex gap-2 justify-between items-center rounded-md duration-300 cursor-pointer border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 text-white ${ 
+              activeTab === tab.name && tab.name == "Inbox" ? 'bg-blue-900'
+              : activeTab === tab.name && tab.name == "Completed" ? 'bg-green-900'
+              : activeTab === tab.name && tab.name == "Today" ? 'bg-green-700' 
+              : activeTab === tab.name && tab.name == "Missed" ? 'bg-red-900'
+              : ''
+            }`}
+            onClick={() => { setActiveTab(tab.name); onTabClick(tab.name); } } >
+              <span className='inline-flex items-center gap-2'>{tab.icon} {tab.name}</span>
+              <span className={`bg-slate-700 px-2 rounded-full ${tab.count == 0 ? 'opacity-0':'opacity-100'}`}>{tab.count}</span>
           </div>
         ))}
       </div>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { FaBars, FaTimes, FaInbox, FaCalendar, FaCheckSquare, FaExclamationTriangle } from 'react-icons/fa';
+import { FaBars, FaTimes, FaInbox, FaCalendar, FaCheckSquare, FaExclamationTriangle, FaTag } from 'react-icons/fa';
 import myAvatar from '../assets/MyAvatar Notion.png'; // Import directly
 
 interface SidebarProps {
@@ -22,7 +22,7 @@ export const tabs = [
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabClick, tabCounts }) => {  // Correct prop destructuring
-  const [activeTab, setActiveTab] = useState(null); // Store active tab
+  const [activeTab, setActiveTab] = useState('Inbox'); // Store active tab
   const tabsWithCounts: (typeof tabs[number] & { count: number })[] = tabs.map(tab => ({
     ...tab, 
     count: tabCounts[tab.name as keyof typeof tabCounts] || 0, // Dynamically get count
@@ -33,16 +33,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabCl
 
       <div className="flex justify-between items-center py-4 gap-4">
         <h1 className={`font-bold text-gray-200 text-[20px] transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 ml-4' : 'opacity-0 hidden'}`}> {/* Conditional opacity for title */}
-          Planify replica
+          Plan<strong>IT</strong>
         </h1>
-        <button onClick={toggleSidebar} className={`text-gray-400 border-[1px] border-blue-400/0 hover:border-blue-400/50 active:bg-blue-600 hover:text-gray-200 ${isSidebarOpen ? 'mr-4' : 'mx-4'}`}>
+        <button onClick={toggleSidebar} className={`text-gray-400 border-[1px] border-blue-400/20 hover:border-blue-400/60 active:bg-blue-600 hover:text-gray-200 
+          ${isSidebarOpen ? 'mr-4' : 'mx-4'}`}>
           {isSidebarOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
       <div className="my-2 bg-gray-600 h-[1px]"></div>
 
-      <div className={`grid grid-cols-2 gap-2 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 mx-4' : 'opacity-0 hidden'}`}> {/* Conditional opacity for tabs */}
+      <div className={`grid grid-cols-2 gap-2 my-4 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 mx-4' : 'opacity-0 hidden'}`}> {/* Conditional opacity for tabs */}
         {tabsWithCounts.map((tab) => (
           <div
             key={tab.name}
@@ -58,6 +59,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabCl
               <span className={`bg-slate-700 px-2 rounded-full ${tab.count == 0 ? 'opacity-0':'opacity-100'}`}>{tab.count}</span>
           </div>
         ))}
+      </div>
+
+      <div className={`bg-gray-600 h-[1px] ${isSidebarOpen ? 'opacity-100 my-2 ' : 'opacity-0'}`}></div>
+
+      <div className='flex justify-between items-center p-4'>
+        <div className={`flex items-center  py-2.5 px-2 w-full rounded-md duration-300 cursor-pointer border-[1px] border-blue-400/20 hover:border-blue-400/50 active:bg-blue-600 
+        ${isSidebarOpen ? 'justify-start' : 'justify-center'}`}>
+        {isSidebarOpen ? 
+          <span className='inline-flex items-center justify-center gap-2'><FaTag /> tags</span> 
+          : <FaTag /> }
+        </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0">

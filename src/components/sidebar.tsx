@@ -63,14 +63,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar, onTabCl
 
       <div className={`bg-gray-600 h-[1px] ${isSidebarOpen ? 'opacity-100 my-2 ' : 'opacity-0'}`}></div>
 
-      <div className='flex justify-between items-center p-4'>
+      {/* <div className='flex justify-between items-center p-4'>
         <div className={`flex items-center  py-2.5 px-2 w-full rounded-md duration-300 cursor-pointer border-[1px] border-blue-400/20 hover:border-blue-400/50 active:bg-blue-600 
         ${isSidebarOpen ? 'justify-start' : 'justify-center'}`}>
         {isSidebarOpen ? 
           <span className='inline-flex items-center justify-center gap-2'><FaTag /> tags</span> 
           : <FaTag /> }
         </div>
-      </div>
+      </div> */}
 
       <div className="absolute inset-x-0 bottom-0">
         <div className="my-4 bg-gray-600 h-[1px]"></div>

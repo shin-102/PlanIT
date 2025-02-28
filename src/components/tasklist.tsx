@@ -120,10 +120,21 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
   const handleEditTask = (id: number) => {
     // Cancel adding task mode if it was active
     setIsAddingTask(false);
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === id ? { ...task, isEditing: true } : task
-      )
+
+    setTasks(prevTasks => {
+      const taskToEdit = prevTasks.find(task => task.id === id);
+
+      if (taskToEdit) {
+        setNewTaskText(taskToEdit.text);
+        setNewTaskDate(taskToEdit.date || '');
+        setNewTaskTags(taskToEdit.tags || []);
+        setNewUrgency(taskToEdit.urgency || '');
+        setNewImportance(taskToEdit.importance || '');
+      }
+      return prevTasks.map(task =>
+        task.id === id ? { ...task, isEditing: true } : {...task, isEditing: false}
+      )}
+      
     );
   };
 
@@ -204,7 +215,7 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
 
 
   return (
-    <div className=""> {/* Main container with dark background */}
+    <div > {/* Main container with dark background */}
       <div className={`flex items-center justify-between p-4 rounded-lg ${
         activeTab == 'Inbox' ? 'bg-blue-900' 
         : activeTab == 'Missed' ? 'bg-red-900' 
@@ -372,7 +383,7 @@ const Tasklist: React.FC<TasklistProps> = ({ activeTab, setTabCounts }) => {
                       }`}>{task.urgency}
                       </span>
                       {task.tags && task.tags.length > 0 && (
-                        <span className="italic mr-2 text-gray-400 hidden group-hover:visible">
+                        <span className="italic mr-2 text-gray-400 hidden group-hover:block">
                           #{task.tags.join(', #')}
                         </span>
                       )}                  
